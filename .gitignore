@@ -1,0 +1,14 @@
+node_modules/
+runtime/
+.env
+.venv/
+__pycache__/
+*.pyc
+models/
+*.wav
+.npm-cache/
+data/persona-reference.md
+data/user-transcript-unlinked.txt
+public/assets/mahad-reference.webp
+docs/evaluation-results.json
+.DS_Store

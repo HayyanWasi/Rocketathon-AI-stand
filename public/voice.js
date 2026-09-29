@@ -1,0 +1,16 @@
+export class LocalVoice {
+  constructor(avatar,onStatus){this.avatar=avatar;this.onStatus=onStatus;this.generation=0;this.abort=null;this.audio=null;this.url=null;}
+  stop(){this.generation++;this.abort?.abort();this.audio?.pause();this.audio=null;if(this.url)URL.revokeObjectURL(this.url);this.url=null;this.avatar.stop();this.onStatus(false);}
+  async speak(text){this.stop();const generation=this.generation;this.abort=new AbortController();this.onStatus(true);try{
+    const r=await fetch('/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text}),signal:this.abort.signal});
+    if(!r.ok){const d=await r.json();throw Error(d.error||'ElevenLabs voice unavailable.');}
+    const blob=await r.blob();if(generation!==this.generation)return;this.url=URL.createObjectURL(blob);this.audio=new Audio(this.url);
+    this.context??=new AudioContext();await this.context.resume();const src=this.context.createMediaElementSource(this.audio),analyser=this.context.createAnalyser();analyser.fftSize=256;src.connect(analyser);analyser.connect(this.context.destination);
+    const values=new Uint8Array(analyser.frequencyBinCount);const animate=()=>{if(generation!==this.generation||!this.audio||this.audio.paused)return;analyser.getByteFrequencyData(values);this.avatar.setLevel(Math.min(1,values.reduce((a,b)=>a+b,0)/values.length/65));requestAnimationFrame(animate);};
+    this.audio.onended=()=>{if(this.url)URL.revokeObjectURL(this.url);this.url=null;this.audio=null;this.avatar.stop();this.onStatus(false);};await this.audio.play();this.avatar.setSpeaking(true);animate();
+  }catch(e){if(e.name!=='AbortError'&&generation===this.generation){this.avatar.stop();this.onStatus(false,e.message);}}}
+}
+export class LocalMicrophone {
+  async start(){this.stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true},video:false});this.context=new AudioContext();this.samples=[];this.source=this.context.createMediaStreamSource(this.stream);this.processor=this.context.createScriptProcessor(4096,1,1);this.processor.onaudioprocess=e=>this.samples.push(new Float32Array(e.inputBuffer.getChannelData(0)));this.source.connect(this.processor);this.processor.connect(this.context.destination);}
+  async stop(){this.processor?.disconnect();this.source?.disconnect();this.stream?.getTracks().forEach(t=>t.stop());const rate=this.context?.sampleRate||48000;await this.context?.close();const total=this.samples.reduce((n,a)=>n+a.length,0),input=new Float32Array(total);let offset=0;for(const a of this.samples){input.set(a,offset);offset+=a.length;}const ratio=rate/16000,out=new Int16Array(Math.floor(total/ratio));for(let i=0;i<out.length;i++)out[i]=Math.max(-1,Math.min(1,input[Math.floor(i*ratio)]))*32767;const buffer=new ArrayBuffer(44+out.byteLength),view=new DataView(buffer),str=(o,s)=>[...s].forEach((ch,i)=>view.setUint8(o+i,ch.charCodeAt(0)));str(0,'RIFF');view.setUint32(4,36+out.byteLength,true);str(8,'WAVE');str(12,'fmt ');view.setUint32(16,16,true);view.setUint16(20,1,true);view.setUint16(22,1,true);view.setUint32(24,16000,true);view.setUint32(28,32000,true);view.setUint16(32,2,true);view.setUint16(34,16,true);str(36,'data');view.setUint32(40,out.byteLength,true);new Int16Array(buffer,44).set(out);return new Blob([buffer],{type:'audio/wav'});}
+}

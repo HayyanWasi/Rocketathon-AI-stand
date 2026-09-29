@@ -1,0 +1,13 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {randomUUID} from 'node:crypto';
+import {loadBase,loadTopic,selectTopic} from '../backend/context.mjs';
+import {studentId,loadStudent,saveStudent} from '../backend/students.mjs';
+import {rank,validateLesson,escalate} from '../backend/lesson.mjs';
+const {persona,index}=await loadBase(),topic=index.topics[0],corpus=await loadTopic(topic);
+test('standing persona identifies AI representation',()=>assert.match(persona,/AI representation/));
+test('topic index is small and loads the selected passage file',()=>{assert.equal(selectTopic('Why do wavefronts spread?',index).id,'diffraction');assert.equal(selectTopic('Explain electric circuits',index),null);assert.ok(corpus.passages.length>0);});
+test('retrieval selects lecture evidence',()=>assert.equal(rank('wider gap less spreading',corpus.passages)[0].id,'D06'));
+test('student files load separately',async()=>{const a='test_'+randomUUID(),b='test_'+randomUUID();await saveStudent({id:a,history:[{role:'user',content:'my own question'}],lastTopic:'diffraction'});const aa=await loadStudent(a),bb=await loadStudent(b);assert.equal(aa.history[0].content,'my own question');assert.equal(bb.history.length,0);});
+test('student IDs cannot select paths',()=>assert.throws(()=>studentId('../private')));
+test('missing evidence and other topics escalate',()=>{assert.equal(escalate('insufficient_source').citations.length,0);assert.equal(escalate('outside_topic').status,'escalate');});
+test('agent citations are restricted to supplied IDs',()=>{const o={status:'answer',answer:'Generated',source_ids:['fake'],check_question:'Why?',check_answer:'Because',board:{steps:[],diagram:[]}};assert.throws(()=>validateLesson(o,corpus,['D06']),/citations/);});
+test('validated board strips executable primitives',()=>{const o={status:'answer',answer:'Generated',source_ids:['D06'],check_question:'Why?',check_answer:'Because',board:{title:'Board',steps:['Step'],diagram:[{type:'script',text:'alert(1)'},{type:'line',x:200,y:-10}]}};const a=validateLesson(o,corpus,['D06']);assert.equal(a.board.diagram.length,1);assert.equal(a.board.diagram[0].x,100);assert.match(a.citations[0].url,/t=26532s/);});

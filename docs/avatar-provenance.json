@@ -1,0 +1,15 @@
+{
+  "sourcePage": "https://titan.edu.pk/college/",
+  "imageUrl": "https://titan.edu.pk/college/wp-content/uploads/2026/04/Sir-Mahad-Amer-Physics-1.webp",
+  "association": "Official Titan College faculty card directly labels the source image Sir Mahad Amer, Physics Teacher.",
+  "reuse": "Publicly accessible faculty portrait; no open reuse license verified. User states the teacher agreed to participate. Generated derivative is local app reference art.",
+  "tool": "Built-in image_gen__imagegen",
+  "prompt": "Use case: stylized-concept. Asset type: teacher avatar reference art for a local web application. Input image 1 is a reference photograph of Sir Mahad Amer, use for likeness. Create ONE low-poly 3D-style waist-up portrait facing directly forward. Preserve this person's recognizable facial likeness: face shape, dark side-swept hair, thick eyebrows, dark eyes, neatly trimmed full beard and moustache, warm medium skin tone, friendly expression. Change clothing to a clean plain black short-sleeve shirt. Arms relaxed at sides, symmetrical upright neutral pose, shoulders fully visible. Faceted polygonal geometry throughout face, hair, shirt and arms, polished tasteful 3D game character rendering. Warm neutral key light, soft shading, no dramatic colored light. Isolated figure on genuinely transparent background, generous transparent margin around hair and arms, waist cropped at bottom. No words, letters, logos, watermark, UI, props, floor or backdrop. This is a respectful stylized portrait, not a caricature.",
+  "reference": "mahad-reference.webp",
+  "generated": "mahad-lowpoly.png",
+  "dimensions": [
+    1113,
+    1414
+  ],
+  "format": "RGBA PNG, alpha range 0–255"
+}

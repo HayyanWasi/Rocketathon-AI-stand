@@ -1,0 +1,582 @@
+{
+  "topic": "Diffraction of waves",
+  "qualification": "O Level 5054 / IGCSE 0625",
+  "source": {
+    "videoId": "H5ygtkokVsI",
+    "url": "https://www.youtube.com/watch?v=H5ygtkokVsI",
+    "title": "Part 1: Physics 5054/0625 Full Syllabus Revision | Don't Miss This 13 Hour Session",
+    "channel": "Physics with MAC",
+    "verification": "Verified channel: Physics with MAC (UCMpFRLbtJDWIcZGp2iOppUg), linked from sirmahadamer.com. The user identified this video as the source of the supplied transcript.",
+    "transcriptOrigin": "YouTube Hindi auto-captions extracted with youtube-transcript-api 1.2.4 on 2026-09-29; matched against the user-supplied excerpt. Corrected passages are Roman Urdu paraphrases, not verbatim quotations.",
+    "timestampBasis": "Verified against fetched caption offsets in seconds. The initial t=595 URL parameter is not added to these offsets.",
+    "approval": "Corrections reviewed for physics and transcription by the prototype builder; not teacher-approved",
+    "channelId": "UCMpFRLbtJDWIcZGp2iOppUg"
+  },
+  "passages": [
+    {
+      "id": "D01",
+      "start": 26340,
+      "end": 26377,
+      "time": "07:19:00",
+      "title": "Drawing curved crests after a gap",
+      "text": "Gap ke baad diffraction pattern mein curved, approximately circular wave crests banao. Ek, do, teen crests banao aur make sure ke un ke darmiyan gap same ho.",
+      "original": "है? तो आपने कहा क्योंकि यार ये फ्लैट है। दैट्स व्हाई द ड्राइंग इज रॉन्ग। इसको कर्व होना चाहिए। और इसने कहा मैंने गैप कम कर दिया है। अब डफ्रेक्शन पैटर्न बनाया। तो आपने सर्कुलर बनाने थे। बिल्कुल सर्कुलर बिल्कुल सर्कुलर एक दो तीन जितना बना सकते हैं। ठीक है मैं इतना अच्छा सर्किल नहीं बना पाऊंगा। चार ठीक है? अच्छा ये बस यहां से चार ये परफेक्ट आपको मार्क्स मिल जाएंगे। मेक श्योर कीजिएगा कि ये जो गैप है वो अगेन सेम हो। ठीक है? अब हेतम वाला कासेप्ट यहां पर फेल हो जाता है। बेटा एग्जामिनर का दिया हुआ क्वेश्चन है। अब आप गौर करो",
+      "keywords": [
+        "draw",
+        "drawing",
+        "diagram",
+        "crest",
+        "wavefront",
+        "circular",
+        "curve",
+        "banao",
+        "ruler",
+        "three"
+      ],
+      "claims": [
+        "curved_crests",
+        "constant_wavelength"
+      ],
+      "corrections": [
+        "Standardized diffraction and crest terminology; removed repetition without changing the instruction."
+      ],
+      "videoUrl": "https://www.youtube.com/watch?v=H5ygtkokVsI",
+      "rawSegments": [
+        {
+          "text": "है? तो आपने कहा क्योंकि यार ये फ्लैट है।",
+          "start": 26340.558,
+          "duration": 4.802
+        },
+        {
+          "text": "दैट्स व्हाई द ड्राइंग इज रॉन्ग। इसको",
+          "start": 26343.12,
+          "duration": 5.28
+        },
+        {
+          "text": "कर्व होना चाहिए। और इसने कहा मैंने गैप",
+          "start": 26345.36,
+          "duration": 4.88
+        },
+        {
+          "text": "कम कर दिया है। अब डफ्रेक्शन पैटर्न",
+          "start": 26348.4,
+          "duration": 4.64
+        },
+        {
+          "text": "बनाया। तो आपने सर्कुलर बनाने थे। बिल्कुल",
+          "start": 26350.24,
+          "duration": 6.16
+        },
+        {
+          "text": "सर्कुलर बिल्कुल सर्कुलर एक",
+          "start": 26353.04,
+          "duration": 5.678
+        },
+        {
+          "text": "दो",
+          "start": 26356.4,
+          "duration": 4.8
+        },
+        {
+          "text": "तीन जितना बना सकते हैं। ठीक है मैं इतना",
+          "start": 26358.718,
+          "duration": 4.882
+        },
+        {
+          "text": "अच्छा सर्किल नहीं बना पाऊंगा।",
+          "start": 26361.2,
+          "duration": 7.04
+        },
+        {
+          "text": "चार ठीक है? अच्छा ये बस यहां से चार ये",
+          "start": 26363.6,
+          "duration": 6.32
+        },
+        {
+          "text": "परफेक्ट आपको मार्क्स मिल जाएंगे। मेक",
+          "start": 26368.24,
+          "duration": 4
+        },
+        {
+          "text": "श्योर कीजिएगा कि ये जो गैप है वो अगेन",
+          "start": 26369.92,
+          "duration": 4.958
+        },
+        {
+          "text": "सेम हो। ठीक है? अब हेतम वाला कासेप्ट",
+          "start": 26372.24,
+          "duration": 3.76
+        },
+        {
+          "text": "यहां पर फेल हो जाता है। बेटा एग्जामिनर",
+          "start": 26374.878,
+          "duration": 2.962
+        },
+        {
+          "text": "का दिया हुआ क्वेश्चन है। अब आप गौर करो",
+          "start": 26376,
+          "duration": 4.798
+        }
+      ]
+    },
+    {
+      "id": "D02",
+      "start": 26377,
+      "end": 26412,
+      "time": "07:19:37",
+      "title": "Flatter does not mean perfectly flat",
+      "text": "Wavefront flatter ho sakta hai, flat nahin. Wider gap ke baad bhi kuch curvature aur spreading rehti hai. Diagram mein perfectly straight outgoing wavefronts dikhana is question mein ghalat hai.",
+      "original": "तो इसमें एक वेवलेंथ कम है इसके गैप से बट बनाने से। ठीक है? तो इसलिए मैं आपको बोला था कि नहीं नहीं फ्लैट कभी भी नहीं होगा। शाह सेब फ्लैट टर होगा। फ्लैट टर होगा। फ्लैट नहीं होगा। नहीं नहीं नहीं नहीं नहीं नहीं ये फ्लैट टर होगा। फ्लैट नहीं होगा। फ्लैट नहीं होता। फ्लैटर होता है। ठीक है?",
+      "keywords": [
+        "flat",
+        "flatter",
+        "straight",
+        "curve",
+        "bend",
+        "bilkul",
+        "seedhi",
+        "wider"
+      ],
+      "claims": [
+        "flatter_not_flat"
+      ],
+      "corrections": [
+        "Transcribed repeated 'flat ter' as 'flatter'. The wider-gap context is supported by D05."
+      ],
+      "videoUrl": "https://www.youtube.com/watch?v=H5ygtkokVsI",
+      "rawSegments": [
+        {
+          "text": "तो इसमें एक वेवलेंथ कम है इसके गैप से बट",
+          "start": 26377.84,
+          "duration": 5.2
+        },
+        {
+          "text": "बनाने से। ठीक है? तो इसलिए मैं आपको बोला",
+          "start": 26380.798,
+          "duration": 5.202
+        },
+        {
+          "text": "था कि नहीं नहीं फ्लैट कभी भी नहीं होगा।",
+          "start": 26383.04,
+          "duration": 4.72
+        },
+        {
+          "text": "शाह सेब",
+          "start": 26386,
+          "duration": 4.718
+        },
+        {
+          "text": "फ्लैट टर होगा। फ्लैट टर होगा। फ्लैट नहीं",
+          "start": 26387.76,
+          "duration": 5.958
+        },
+        {
+          "text": "होगा।",
+          "start": 26390.718,
+          "duration": 3
+        },
+        {
+          "text": "नहीं नहीं नहीं नहीं नहीं नहीं",
+          "start": 26393.84,
+          "duration": 7.92
+        },
+        {
+          "text": "ये फ्लैट टर होगा। फ्लैट नहीं होगा।",
+          "start": 26396.798,
+          "duration": 10.042
+        },
+        {
+          "text": "फ्लैट नहीं होता। फ्लैटर होता है। ठीक है?",
+          "start": 26401.76,
+          "duration": 5.08
+        }
+      ]
+    },
+    {
+      "id": "D03",
+      "start": 26422,
+      "end": 26454,
+      "time": "07:20:22",
+      "title": "Wavelength stays the same",
+      "text": "Aik side wavelength chhoti aur doosri side bohat bari dikhana ghalat hai. Same medium mein sirf gap se diffraction hone par wavelength increase nahin hoti. Wave crests shadow region mein bend karte hain.",
+      "original": "बेटा एग्जामिनर ने बोला है इसमें क्या-क्या गलतियां हैं? अलग-अलग गलतियां हैं। पहला तो यहां वेवलेंथ छोटी है। यहां वेवलेंथ बहुत ज्यादा है। ऐसा हो ही नहीं सकता। अलग-अलग एक गलती मांगी है। बहुत सारी बतानी है। यह वेवलेंथ छोटी है। बहुत ज्यादा है। ऐसा नहीं हो सकता। बीच में डायफ्रेक्शन में कभी भी वेव फ्लैट नहीं होती। वेव हमेशा थोड़ी कर्व होती है। ठीक है? थोड़ी सी कर्व हमेशा होती है। ऐसा थोड़ी है बेटा वेव फैलने के बाद बिल्कुल सीधी हो जाए। ये पॉसिबल ही नहीं है। वेवलेंथ का इंक्रीस दिखाया हुआ है। ये रोंग है। दोनों चीजें रोंग है। ठीक है? तो इसमें मल्टीपल आंसर्स कैन बी करेक्ट। ठीक है? क्योंकि एक नंबर का क्वेश्चन है। मल्टीपल आंसर्स कैन बी करेक्ट। आप जो दिल",
+      "keywords": [
+        "wavelength",
+        "spacing",
+        "distance",
+        "same",
+        "increase",
+        "frequency",
+        "speed",
+        "change",
+        "farq",
+        "badal"
+      ],
+      "claims": [
+        "constant_wavelength",
+        "curved_crests"
+      ],
+      "corrections": [
+        "Added the same-medium condition to avoid treating the spoken classroom shorthand as universal."
+      ],
+      "videoUrl": "https://www.youtube.com/watch?v=H5ygtkokVsI",
+      "rawSegments": [
+        {
+          "text": "बेटा एग्जामिनर ने बोला है इसमें",
+          "start": 26422,
+          "duration": 3.68
+        },
+        {
+          "text": "क्या-क्या गलतियां हैं? अलग-अलग गलतियां",
+          "start": 26423.68,
+          "duration": 3.92
+        },
+        {
+          "text": "हैं। पहला तो यहां वेवलेंथ छोटी है। यहां",
+          "start": 26425.68,
+          "duration": 3.36
+        },
+        {
+          "text": "वेवलेंथ बहुत ज्यादा है। ऐसा हो ही नहीं",
+          "start": 26427.6,
+          "duration": 3.84
+        },
+        {
+          "text": "सकता। अलग-अलग एक गलती मांगी है। बहुत",
+          "start": 26429.04,
+          "duration": 3.838
+        },
+        {
+          "text": "सारी बतानी है। यह वेवलेंथ छोटी है। बहुत",
+          "start": 26431.44,
+          "duration": 3.278
+        },
+        {
+          "text": "ज्यादा है। ऐसा नहीं हो सकता। बीच में",
+          "start": 26432.878,
+          "duration": 3.76
+        },
+        {
+          "text": "डायफ्रेक्शन में कभी भी वेव फ्लैट नहीं",
+          "start": 26434.718,
+          "duration": 4.322
+        },
+        {
+          "text": "होती। वेव हमेशा थोड़ी कर्व होती है। ठीक",
+          "start": 26436.638,
+          "duration": 4.802
+        },
+        {
+          "text": "है? थोड़ी सी कर्व हमेशा होती है। ऐसा",
+          "start": 26439.04,
+          "duration": 4
+        },
+        {
+          "text": "थोड़ी है बेटा वेव फैलने के बाद बिल्कुल",
+          "start": 26441.44,
+          "duration": 3.438
+        },
+        {
+          "text": "सीधी हो जाए। ये पॉसिबल ही नहीं है।",
+          "start": 26443.04,
+          "duration": 3.598
+        },
+        {
+          "text": "वेवलेंथ का इंक्रीस दिखाया हुआ है। ये",
+          "start": 26444.878,
+          "duration": 4.08
+        },
+        {
+          "text": "रोंग है। दोनों चीजें रोंग है। ठीक है? तो",
+          "start": 26446.638,
+          "duration": 4.24
+        },
+        {
+          "text": "इसमें मल्टीपल आंसर्स कैन बी करेक्ट। ठीक",
+          "start": 26448.958,
+          "duration": 3.202
+        },
+        {
+          "text": "है? क्योंकि एक नंबर का क्वेश्चन है।",
+          "start": 26450.878,
+          "duration": 3.522
+        },
+        {
+          "text": "मल्टीपल आंसर्स कैन बी करेक्ट। आप जो दिल",
+          "start": 26452.16,
+          "duration": 4.398
+        }
+      ]
+    },
+    {
+      "id": "D04",
+      "start": 26454,
+      "end": 26491,
+      "time": "07:20:54",
+      "title": "One mark, one clear criticism",
+      "text": "Wavelength too large ya crests too straight valid criticisms ho sakti hain. Agar aik B1 mark hai, aik clear correct point likho. Extra conflicting baat mat add karo.",
+      "original": "चाहे लिख सकते हैं। बट वो फ्लैटर वाली बात मैं इसलिए कह रहा हूं क्योंकि वो थोड़ी सी रिलेटेड है उससे। तो यह देखिएगा। वेवलेंथ टूल लार्ज क्रस्ट आर शैडो आर क्रस्ट इन द शैडो शुड बी बेंट। शैडो शुड बी बेंट। ठीक है? बेंट होनी चाहिए। वर्टिकल लाइंस आर टू स्ट्रेट। ये रॉन्ग है। ठीक है? एक लिखना है। एक लेंथ लिखना है। एक पॉइंट लिखना है बेटा। एक B1 का मार्क के एक्स्ट्रा बात नहीं करनी। एक बात ही करनी है मनाल। ठीक है? एक्स्ट्रा नॉलेज इज वेरी डिफिकल्ट एंड वेरी बैड। राइट वन आंसर ओनली। अच्छा जी। चल अब एक क्वेश्चन मैं सोलली पूरा करा रहा",
+      "keywords": [
+        "mark",
+        "exam",
+        "one",
+        "B1",
+        "mistake",
+        "wrong",
+        "error",
+        "criticism",
+        "point",
+        "answer",
+        "number"
+      ],
+      "claims": [
+        "one_clear_point",
+        "constant_wavelength",
+        "curved_crests"
+      ],
+      "corrections": [
+        "Garbled 'crust/shadow' wording normalized to wave crests bending into the shadow region."
+      ],
+      "videoUrl": "https://www.youtube.com/watch?v=H5ygtkokVsI",
+      "rawSegments": [
+        {
+          "text": "चाहे लिख सकते हैं। बट वो फ्लैटर वाली बात",
+          "start": 26454.4,
+          "duration": 3.68
+        },
+        {
+          "text": "मैं इसलिए कह रहा हूं क्योंकि वो थोड़ी सी",
+          "start": 26456.558,
+          "duration": 6.482
+        },
+        {
+          "text": "रिलेटेड है उससे। तो यह देखिएगा।",
+          "start": 26458.08,
+          "duration": 8.558
+        },
+        {
+          "text": "वेवलेंथ टूल लार्ज क्रस्ट आर शैडो आर",
+          "start": 26463.04,
+          "duration": 6.32
+        },
+        {
+          "text": "क्रस्ट इन द शैडो शुड बी बेंट। शैडो शुड",
+          "start": 26466.638,
+          "duration": 5.122
+        },
+        {
+          "text": "बी बेंट। ठीक है? बेंट होनी चाहिए।",
+          "start": 26469.36,
+          "duration": 4.16
+        },
+        {
+          "text": "वर्टिकल लाइंस आर टू स्ट्रेट। ये रॉन्ग",
+          "start": 26471.76,
+          "duration": 4.958
+        },
+        {
+          "text": "है। ठीक है? एक लिखना है। एक लेंथ लिखना",
+          "start": 26473.52,
+          "duration": 5.038
+        },
+        {
+          "text": "है। एक पॉइंट लिखना है बेटा। एक B1 का",
+          "start": 26476.718,
+          "duration": 4.24
+        },
+        {
+          "text": "मार्क के एक्स्ट्रा बात नहीं करनी। एक बात",
+          "start": 26478.558,
+          "duration": 4.642
+        },
+        {
+          "text": "ही करनी है मनाल। ठीक है? एक्स्ट्रा नॉलेज",
+          "start": 26480.958,
+          "duration": 6.322
+        },
+        {
+          "text": "इज वेरी डिफिकल्ट एंड वेरी बैड। राइट वन",
+          "start": 26483.2,
+          "duration": 7.758
+        },
+        {
+          "text": "आंसर ओनली। अच्छा जी। चल",
+          "start": 26487.28,
+          "duration": 5.92
+        },
+        {
+          "text": "अब एक क्वेश्चन मैं सोलली पूरा करा रहा",
+          "start": 26490.958,
+          "duration": 4.642
+        }
+      ]
+    },
+    {
+      "id": "D05",
+      "start": 26504,
+      "end": 26532,
+      "time": "07:21:44",
+      "title": "Three wave crests inside a harbour",
+      "text": "Harbour ke entrance mein gap hai, to andar teen wave crests draw karte waqt bending dikhao. Ek, do, teen. Crest-to-crest spacing same rakho; zaroorat ho to ruler se measure karo.",
+      "original": "फिगर 5.1 शोज़ द वेव ऑफ़ द सी अप्रोचिंग अ हारबर। ठीक है जी? ड्रा थ्री वेव क्रस्ट इन द हारबर बेटा अगेन गैप है तो आपने बेंडिंग ही दिखानी है। एक दो तीन ठीक है? मेक श्योर द गैप शुड बी सेम। ठीक है? थोड़े से मेरे ऊपर नीचे बट चल जाएंगे। ठीक है? अनदर हारबर इज़ मच वाइडर। गैप बिटवीन इट्स फॉल्स। बहुत बड़ा गैप है। ठीक है? डिस्क्राइब एंड एक्सप्लेन हाउ द",
+      "keywords": [
+        "harbour",
+        "harbor",
+        "three",
+        "draw",
+        "crest",
+        "wavefront",
+        "ruler",
+        "spacing",
+        "bending"
+      ],
+      "claims": [
+        "curved_crests",
+        "constant_wavelength"
+      ],
+      "corrections": [
+        "Corrected 'wave crust' to 'wave crest'. Ruler instruction also appears at 07:23:12."
+      ],
+      "videoUrl": "https://www.youtube.com/watch?v=H5ygtkokVsI",
+      "rawSegments": [
+        {
+          "text": "फिगर 5.1 शोज़ द वेव ऑफ़ द सी अप्रोचिंग अ",
+          "start": 26504.16,
+          "duration": 5.52
+        },
+        {
+          "text": "हारबर। ठीक है जी?",
+          "start": 26507.44,
+          "duration": 5.118
+        },
+        {
+          "text": "ड्रा थ्री वेव क्रस्ट इन द हारबर बेटा",
+          "start": 26509.68,
+          "duration": 6.08
+        },
+        {
+          "text": "अगेन गैप है तो आपने बेंडिंग ही दिखानी",
+          "start": 26512.558,
+          "duration": 4.962
+        },
+        {
+          "text": "है। एक",
+          "start": 26515.76,
+          "duration": 3.68
+        },
+        {
+          "text": "दो",
+          "start": 26517.52,
+          "duration": 4.24
+        },
+        {
+          "text": "तीन ठीक है? मेक श्योर द गैप शुड बी सेम।",
+          "start": 26519.44,
+          "duration": 4.08
+        },
+        {
+          "text": "ठीक है? थोड़े से मेरे ऊपर नीचे बट चल",
+          "start": 26521.76,
+          "duration": 5.44
+        },
+        {
+          "text": "जाएंगे। ठीक है? अनदर हारबर इज़ मच वाइडर।",
+          "start": 26523.52,
+          "duration": 6.56
+        },
+        {
+          "text": "गैप बिटवीन इट्स फॉल्स। बहुत बड़ा गैप है।",
+          "start": 26527.2,
+          "duration": 4.8
+        },
+        {
+          "text": "ठीक है? डिस्क्राइब एंड एक्सप्लेन हाउ द",
+          "start": 26530.08,
+          "duration": 3.92
+        }
+      ]
+    },
+    {
+      "id": "D06",
+      "start": 26532,
+      "end": 26564,
+      "time": "07:22:12",
+      "title": "A wider opening means less spreading",
+      "text": "Description: waves would spread less, aur wavefronts flatter honge. Explanation: less diffraction would occur because the gap is wider. Gap kam karne se diffraction zyada, gap barhane se kam hoti hai.",
+      "original": "पैटर्न ऑफ़ द वेव्स इन द हारबर इज़ डिफरेंट। डिस्क्रिप्शन दे वुड स्प्रेड लेस। मोर फ्लैटर यस वेरी गुड एक्सप्लेनेशन लेस डायफ्रेक्शन वुड अकर गैप बढ़ा दिया है। अबे भाई गैप बढ़ा हुआ है। गैप कम करने से डायफ्रेक्शन ज्यादा होती है। इंसरा गैप बढ़ाने से कम होती है।",
+      "keywords": [
+        "gap",
+        "narrow",
+        "wide",
+        "wider",
+        "smaller",
+        "bigger",
+        "spread",
+        "diffraction",
+        "less",
+        "more",
+        "kam",
+        "zyada",
+        "bara",
+        "chhota",
+        "explain",
+        "why"
+      ],
+      "claims": [
+        "gap_relationship",
+        "flatter_not_flat"
+      ],
+      "corrections": [
+        "Corrected spelling of diffraction; comparison assumes wavelength is unchanged."
+      ],
+      "videoUrl": "https://www.youtube.com/watch?v=H5ygtkokVsI",
+      "rawSegments": [
+        {
+          "text": "पैटर्न ऑफ़ द वेव्स इन द हारबर इज़ डिफरेंट।",
+          "start": 26532,
+          "duration": 3.52
+        },
+        {
+          "text": "डिस्क्रिप्शन",
+          "start": 26534,
+          "duration": 6.4
+        },
+        {
+          "text": "दे वुड स्प्रेड लेस।",
+          "start": 26535.52,
+          "duration": 4.88
+        },
+        {
+          "text": "मोर फ्लैटर",
+          "start": 26541.92,
+          "duration": 3.48
+        },
+        {
+          "text": "यस वेरी गुड एक्सप्लेनेशन",
+          "start": 26545.6,
+          "duration": 7.4
+        },
+        {
+          "text": "लेस डायफ्रेक्शन वुड अकर",
+          "start": 26548.878,
+          "duration": 4.122
+        },
+        {
+          "text": "गैप बढ़ा दिया है। अबे भाई गैप बढ़ा हुआ है।",
+          "start": 26553.84,
+          "duration": 5.2
+        },
+        {
+          "text": "गैप कम करने से डायफ्रेक्शन ज्यादा होती",
+          "start": 26557.2,
+          "duration": 6.518
+        },
+        {
+          "text": "है। इंसरा गैप बढ़ाने से कम होती है।",
+          "start": 26559.04,
+          "duration": 4.678
+        }
+      ]
+    }
+  ]
+}
