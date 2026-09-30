@@ -1,0 +1,42 @@
+[
+  {
+    "id": "EX01",
+    "type": "check",
+    "question": "Gap chhota karne se diffraction par kya asar hota hai?",
+    "expected": "More spreading/diffraction with narrower gap",
+    "passageIds": ["D06"],
+    "misconceptions": ["diffraction decreases"]
+  },
+  {
+    "id": "EX02",
+    "type": "check",
+    "question": "Diffraction ke baad kya wavelength change hoti hai?",
+    "expected": "No, wavelength remains the same.",
+    "passageIds": ["D03", "D04"],
+    "misconceptions": ["wavelength increases", "wavelength decreases"]
+  },
+  {
+    "id": "EX03",
+    "type": "check",
+    "question": "Diagram draw karte waqt spacing ka kya khayal rakhna chahiye?",
+    "expected": "Spacing should be constant, use a ruler to ensure this.",
+    "passageIds": ["D01", "D05"],
+    "misconceptions": ["spacing can vary", "draw randomly"]
+  },
+  {
+    "id": "EX04",
+    "type": "check",
+    "question": "Agar gap wide ho to wavefronts kaise nikalte hain?",
+    "expected": "Wavefronts become flatter, but not perfectly flat.",
+    "passageIds": ["D02", "D06"],
+    "misconceptions": ["perfectly flat", "completely straight", "more curved"]
+  },
+  {
+    "id": "EX05",
+    "type": "check",
+    "question": "Exam mein agar 1 mark ka error pucha jaye to kitne points likhne chahiye?",
+    "expected": "Write exactly one clear, correct point.",
+    "passageIds": ["D04"],
+    "misconceptions": ["write as many as possible", "write extra knowledge"]
+  }
+]

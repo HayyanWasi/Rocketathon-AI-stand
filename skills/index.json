@@ -1,0 +1,32 @@
+[
+  {
+    "id": "explain-concept",
+    "title": "Explain a concept",
+    "activate": "Student asks what/why/how about a physics concept",
+    "keywords": ["kya", "kyun", "what", "why", "how", "explain", "samjhao"]
+  },
+  {
+    "id": "correct-misconception",
+    "title": "Correct a misconception",
+    "activate": "Student states something incorrect about physics",
+    "keywords": ["wrong", "ghalat", "incorrect", "misconception", "nahi"]
+  },
+  {
+    "id": "check-understanding",
+    "title": "Check understanding",
+    "activate": "After explaining a concept, to ensure the student grasped it",
+    "keywords": ["samajh aya", "clear", "question", "test"]
+  },
+  {
+    "id": "exam-coaching",
+    "title": "Exam coaching",
+    "activate": "Student asks about marking schemes, what to write in exam, or common mistakes",
+    "keywords": ["exam", "marks", "paper", "write", "mistake", "scheme"]
+  },
+  {
+    "id": "draw-diagram",
+    "title": "Draw a diagram",
+    "activate": "Student needs help drawing or asks what a diagram looks like",
+    "keywords": ["draw", "diagram", "sketch", "banao", "picture"]
+  }
+]

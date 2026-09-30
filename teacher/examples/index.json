@@ -1,0 +1,12 @@
+[
+  {
+    "id": "correcting-a-misconception",
+    "title": "Correcting a misconception",
+    "useWhen": "Student has a physics misconception"
+  },
+  {
+    "id": "explaining-a-diagram",
+    "title": "Explaining a diagram",
+    "useWhen": "Student needs help drawing or understanding a diagram"
+  }
+]

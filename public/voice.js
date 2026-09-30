@@ -3,7 +3,7 @@ export class LocalVoice {
   stop(){this.generation++;this.abort?.abort();this.audio?.pause();this.audio=null;if(this.url)URL.revokeObjectURL(this.url);this.url=null;this.avatar.stop();this.onStatus(false);}
   async speak(text){this.stop();const generation=this.generation;this.abort=new AbortController();this.onStatus(true);try{
     const r=await fetch('/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text}),signal:this.abort.signal});
-    if(!r.ok){const d=await r.json();throw Error(d.error||'ElevenLabs voice unavailable.');}
+    if(!r.ok){const d=await r.json();throw Error(d.error||'Local TTS unavailable.');}
     const blob=await r.blob();if(generation!==this.generation)return;this.url=URL.createObjectURL(blob);this.audio=new Audio(this.url);
     this.context??=new AudioContext();await this.context.resume();const src=this.context.createMediaElementSource(this.audio),analyser=this.context.createAnalyser();analyser.fftSize=256;src.connect(analyser);analyser.connect(this.context.destination);
     const values=new Uint8Array(analyser.frequencyBinCount);const animate=()=>{if(generation!==this.generation||!this.audio||this.audio.paused)return;analyser.getByteFrequencyData(values);this.avatar.setLevel(Math.min(1,values.reduce((a,b)=>a+b,0)/values.length/65));requestAnimationFrame(animate);};

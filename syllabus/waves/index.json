@@ -1,0 +1,14 @@
+{
+  "chapter": "Waves",
+  "topics": [
+    {
+      "id": "diffraction",
+      "title": "Diffraction of waves",
+      "aliases": ["diffraction", "wave spreading", "gap se waves", "darwaza", "harbour"],
+      "keywords": ["diffraction", "wavefront", "crest", "gap", "opening", "wavelength", "spread", "diagram", "harbour", "darwaza"],
+      "passagesFile": "data/passages.json",
+      "lessonFile": "syllabus/waves/diffraction/lesson.md",
+      "exercisesFile": "syllabus/waves/diffraction/exercises.json"
+    }
+  ]
+}

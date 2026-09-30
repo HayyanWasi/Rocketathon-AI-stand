@@ -1,7 +1,133 @@
-import fs from 'node:fs/promises';import {loadBase,loadTopic,selectTopic} from './context.mjs';import {loadStudent,saveStudent} from './students.mjs';import {call} from './elevenlabs.mjs';
-const reasons={outside_topic:'This lecture covers diffraction. Please ask Sir Mahad about that other topic.',insufficient_source:'The selected lecture does not give enough evidence. Please ask Sir Mahad.',conflicting_source:'The lecture evidence conflicts. Please ask Sir Mahad to resolve it.',personal_judgement:'That requires Sir Mahad’s own judgement.'};
-export const escalate=reason=>({status:'escalate',reason,answer:reasons[reason]||reasons.insufficient_source,citations:[],check:null,board:null});
-const words=s=>String(s).toLowerCase().match(/[a-z0-9]+/g)||[];
-export function rank(question,passages){const terms=new Set(words(question));return [...passages].map(p=>({p,score:words(p.title+' '+p.text+' '+(p.keywords||[]).join(' ')).filter(w=>terms.has(w)).length})).sort((a,b)=>b.score-a.score).slice(0,4).map(x=>x.p);}
-export function validateLesson(o,corpus,allowed){if(o.status==='escalate')return escalate(reasons[o.reason]?o.reason:'insufficient_source');const ids=[...new Set(o.source_ids||[])];if(o.status!=='answer'||!ids.length||ids.some(id=>!allowed.includes(id)))throw Error('The agent did not provide valid lecture citations.');const cited=ids.map(id=>corpus.passages.find(p=>p.id===id));if(cited.some(p=>!p||p.conflict))return escalate('conflicting_source');const t=(s,n)=>typeof s==='string'?s.trim().slice(0,n):'';if(!t(o.answer,1400)||!t(o.check_question,300)||!t(o.check_answer,400))throw Error('The agent omitted part of the lesson.');const clamp=(v,a,b)=>Number.isFinite(v)?Math.max(a,Math.min(b,v)):a;return {status:'answer',answer:t(o.answer,1400),citations:cited.map(p=>({id:p.id,title:p.title,start:p.start,time:p.time,url:`https://www.youtube.com/watch?v=${corpus.source.videoId}&t=${p.start}s`,excerpt:p.text})),check:{question:t(o.check_question,300),solution:t(o.check_answer,400)},board:{title:t(o.board?.title,100),steps:(Array.isArray(o.board?.steps)?o.board.steps:[]).slice(0,4).map(s=>t(s,180)),equation:t(o.board?.equation,120),diagram:(Array.isArray(o.board?.diagram)?o.board.diagram:[]).slice(0,30).filter(p=>['line','arrow','circle','arc','text'].includes(p.type)).map(p=>({type:p.type,x:clamp(p.x,0,100),y:clamp(p.y,0,100),x2:clamp(p.x2,0,100),y2:clamp(p.y2,0,100),radius:clamp(p.radius,0,70),startAngle:clamp(p.startAngle,-360,360),endAngle:clamp(p.endAngle,-360,360),text:t(p.text,60)}))},provider:'elevenlabs-agent'};}
-export async function teach(question,id,agentId){const {persona,index}=await loadBase();const student=await loadStudent(id);const q=question.toLowerCase();if(/\b(salary|wife|married|javeria|hassam|parents|should i quit|personal opinion)\b/.test(q))return escalate('personal_judgement');const topic=selectTopic(question,index)||((question.trim().split(/\s+/).length<4&&student.lastTopic)?index.topics.find(t=>t.id===student.lastTopic):null);if(!topic)return escalate('outside_topic');const corpus=await loadTopic(topic);const passages=rank(question,corpus.passages);if(!passages.length||passages.some(p=>p.conflict))return escalate(passages.length?'conflicting_source':'insufficient_source');const history=student.history.slice(-4).map(m=>`${m.role}: ${m.content}`).join('\n');let notes=[];try{notes=JSON.parse(await fs.readFile(new URL('../runtime/approved-notes.json',import.meta.url)));}catch{}const approved=notes.map(n=>n.text).join(' ').slice(0,1200);const message=`PROJECT INSTRUCTIONS (apply as teacher, not as a live person):\n${persona}\nApproved teaching notes, if any: ${approved||'(none)'}\nCurrent topic: ${topic.title}. Student history for this student only:\n${history||'(new student)'}\nLECTURE EVIDENCE:\n${passages.map(p=>`[${p.id}] ${p.text}`).join('\n')}\nSTUDENT QUESTION: ${question}\nReturn ONLY JSON: {"status":"answer|escalate","reason":"","answer":"2-4 concise teaching sentences explaining why","source_ids":["one of the IDs above"],"check_question":"one short question?","check_answer":"answer","board":{"title":"short","steps":["step 1","step 2"],"equation":"","diagram":[]}}. The blackboard must be freshly generated for this question. Optional diagram objects use type line/arrow/circle/arc/text and numeric x,y,x2,y2,radius,startAngle,endAngle plus text. Coordinates 0-100. Escalate if evidence insufficient. No markdown fences. Do not invent a physical mechanism absent from evidence.`;const result=await call('chat',{agentId,message});let output;try{const raw=result.text.replace(/^```(?:json)?\s*|\s*```$/g,'').trim();output=JSON.parse(raw);}catch{throw Error('The ElevenLabs agent did not return valid lesson JSON.');}const answer=validateLesson(output,corpus,passages.map(p=>p.id));student.history.push({role:'user',content:question},{role:'assistant',content:answer.answer});student.lastTopic=topic.id;await saveStudent(student);return answer;}
+import { buildPrompt } from './context.mjs';
+import { getSessionState, saveTurn, setSessionState } from './memory.mjs';
+import { generateJSON } from './llm.mjs';
+import fs from 'node:fs/promises';
+
+const reasons = {
+  outside_topic: 'This lecture covers diffraction. Please ask Sir Mahad about that other topic.',
+  insufficient_source: 'The selected lecture does not give enough evidence. Please ask Sir Mahad.',
+  conflicting_source: 'The lecture evidence conflicts. Please ask Sir Mahad to resolve it.',
+  personal_judgement: 'That requires Sir Mahad’s own judgement.'
+};
+
+export const escalate = (reason) => ({
+  status: 'escalate',
+  reason,
+  answer: reasons[reason] || reasons.insufficient_source,
+  citations: [],
+  check: null,
+  board: null,
+  speech_text: reasons[reason] || reasons.insufficient_source
+});
+
+export function validateLesson(o, corpus, allowedIds) {
+  if (o.status === 'escalate') return escalate(reasons[o.reason] ? o.reason : 'insufficient_source');
+  const ids = [...new Set(o.source_ids || [])];
+  if (o.status !== 'answer' || !ids.length || ids.some(id => !allowedIds.includes(id))) {
+    throw Error('The agent did not provide valid lecture citations.');
+  }
+  const cited = ids.map(id => corpus.passages.find(p => p.id === id));
+  if (cited.some(p => !p || p.conflict)) return escalate('conflicting_source');
+  
+  const t = (s, n) => typeof s === 'string' ? s.trim().slice(0, n) : '';
+  if (!t(o.answer, 1400) || !t(o.check_question, 300) || !t(o.check_answer, 400)) {
+    throw Error('The agent omitted part of the lesson.');
+  }
+  
+  const clamp = (v, a, b) => Number.isFinite(v) ? Math.max(a, Math.min(b, v)) : a;
+  
+  return {
+    status: o.status,
+    answer: t(o.answer, 1400),
+    speech_text: t(o.speech_text, 1400) || t(o.answer, 1400),
+    citations: cited.map(p => ({
+      id: p.id,
+      title: p.title,
+      start: p.start,
+      time: p.time,
+      url: `/api/passage?id=${p.id}`,
+      excerpt: p.text
+    })),
+    check: {
+      question: t(o.check_question, 300),
+      solution: t(o.check_answer, 400),
+      speech: t(o.check_speech, 400) || t(o.check_question, 300)
+    },
+    board: {
+      title: t(o.board?.title, 100),
+      steps: (Array.isArray(o.board?.steps) ? o.board.steps : []).slice(0, 4).map(s => t(s, 180)),
+      equation: t(o.board?.equation, 120),
+      diagram: (Array.isArray(o.board?.diagram) ? o.board.diagram : []).slice(0, 30)
+        .filter(p => ['line', 'arrow', 'circle', 'arc', 'text'].includes(p.type))
+        .map(p => ({
+          type: p.type,
+          x: clamp(p.x, 0, 100),
+          y: clamp(p.y, 0, 100),
+          x2: clamp(p.x2, 0, 100),
+          y2: clamp(p.y2, 0, 100),
+          radius: clamp(p.radius, 0, 70),
+          startAngle: clamp(p.startAngle, -360, 360),
+          endAngle: clamp(p.endAngle, -360, 360),
+          text: t(p.text, 60)
+        }))
+    },
+    provider: 'local-llm'
+  };
+}
+
+const lessonSchema = {
+  type: "object",
+  required: ["status", "answer", "speech_text"],
+  properties: {
+    status: { type: "string", enum: ["answer", "escalate", "clarify", "feedback", "greeting"] },
+    reason: { type: "string" },
+    answer: { type: "string" },
+    speech_text: { type: "string" },
+    source_ids: { type: "array", items: { type: "string" } },
+    check_question: { type: "string" },
+    check_answer: { type: "string" },
+    check_speech: { type: "string" },
+    board: {
+      type: "object",
+      properties: {
+        title: { type: "string" },
+        steps: { type: "array", items: { type: "string" } },
+        equation: { type: "string" },
+        diagram: { type: "array", items: { type: "object" } }
+      }
+    }
+  }
+};
+
+export async function teach(question, options = {}) {
+  const state = await getSessionState();
+  const q = question.toLowerCase();
+  if (/\b(salary|wife|married|javeria|hassam|parents|should i quit|personal opinion)\b/.test(q)) {
+    return escalate('personal_judgement');
+  }
+  
+  const { messages, metadata } = await buildPrompt(question, options);
+  if (!metadata.loadedTopic) {
+    return escalate('outside_topic');
+  }
+  
+  const output = await generateJSON(messages, lessonSchema, { signal: options.signal });
+  
+  let corpus = { passages: [] };
+  try {
+    const p = metadata.loadedTopic.passagesFile || 'data/passages.json';
+    corpus = JSON.parse(await fs.readFile(new URL('../' + p, import.meta.url), 'utf8'));
+  } catch (e) {}
+  
+  const validated = validateLesson(output, corpus, metadata.passageIds);
+  
+  await saveTurn({ role: 'user', content: question, sessionId: state.sessionId, timestamp: new Date().toISOString() });
+  await saveTurn({ role: 'assistant', content: validated.answer, sessionId: state.sessionId, timestamp: new Date().toISOString() });
+  
+  const newState = await getSessionState();
+  newState.currentTopic = metadata.loadedTopic.id;
+  newState.pendingCheck = { question: validated.check?.question, solution: validated.check?.solution };
+  await setSessionState(newState);
+  
+  return validated;
+}
