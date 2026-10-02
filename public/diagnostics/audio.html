@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Classroom sound check</title><link rel="stylesheet" href="/style.css"><style>body{overflow:auto;background:#f6f5f1;padding:40px;max-width:640px;margin:auto}h1{font:30px Georgia}p{font-size:13px;line-height:1.8}pre{white-space:pre-wrap;font-size:12px;line-height:1.8}</style></head><body><h1>Local sound check</h1><p>Render the actual send cue and footstep through the browser’s offline audio engine. No sound plays, no microphone is opened, and no model or speech server is contacted.</p><button class="solid-button" id="run">Run sound check</button><pre id="result" role="status">Ready.</pre><p><a href="/">Back to the classroom</a></p><script type="module">
+import {ClassroomSound} from '/sound.js';
+document.querySelector('#run').onclick=async()=>{
+ const result=document.querySelector('#result');result.textContent='Rendering…';
+ try{
+  const context=new OfflineAudioContext(2,44100,44100),sound=new ClassroomSound({volume:.35});
+  // Schedule before offline rendering starts, using the same production nodes.
+  sound.context={state:'running',sampleRate:44100,currentTime:0};
+  for(const name of ['createBuffer','createBufferSource','createBiquadFilter','createGain','createStereoPanner','createOscillator'])sound.context[name]=(...args)=>context[name](...args);
+  sound.master=context.createGain();sound.master.gain.value=.35;sound.master.connect(context.destination);sound.environment=context.createGain();sound.environment.connect(sound.master);
+  sound.cue('send');sound.footstep({side:'left',position:{x:-1.25}});
+  const buffer=await context.startRendering(),samples=buffer.getChannelData(0);let peak=0,total=0,invalid=false;
+  for(const sample of samples){peak=Math.max(peak,Math.abs(sample));total+=sample*sample;if(!Number.isFinite(sample))invalid=true;}
+  const rms=Math.sqrt(total/samples.length),tail=samples.slice(22050).some(v=>Math.abs(v)>.00001),pass=!invalid&&peak>.001&&peak<.1&&rms>0&&!tail;
+  result.textContent=(pass?'PASS':'FAIL')+' · actual browser audio render\nPeak: '+peak.toFixed(5)+' · RMS: '+rms.toFixed(5)+'\nFinite samples: '+!invalid+' · quiet tail: '+!tail+'\nSend and footstep nodes released: '+(sound.nodes.size===0);
+ }catch(error){result.textContent='FAIL · '+error.message;}
+};
+</script></body></html>

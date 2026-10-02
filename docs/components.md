@@ -1,13 +1,30 @@
-# Current components and prior evaluation
+# Components
+
+## Current integration
 
 | Component | Current role |
 |---|---|
-| [ElevenLabs Agents](https://elevenlabs.io/docs/eleven-agents/guides/chat-mode) | Creates a lesson from the active student’s selected lecture evidence. Text-only agent sessions use a private server bridge. |
-| [ElevenLabs Text to Speech](https://elevenlabs.io/docs/api-reference/text-to-speech/convert) | Speaks answers in a stock demo voice. No teacher voice clone has been created. |
-| [ElevenLabs Scribe](https://elevenlabs.io/docs/api-reference/speech-to-text/convert) | Transcribes recorded questions. A live WAV speech sample was recognized successfully. |
-| Local files | Topic index, corrected source passages, persona, and separate active student history. |
-| Three.js portrait | Generated low-poly 2.5D avatar with audio level motion. |
+| Ollama | Teammate backend generates structured lesson JSON via its native `/api/chat` API. `OLLAMA_HOST` and `OLLAMA_MODEL` configure it. An OpenAI-compatible `/v1` URL is not interchangeable with this endpoint. |
+| eSpeak NG | Local mixed Urdu/English WAV synthesis, using `speech_text` and `<en>` language tags. |
+| Installed browser voice | Fallback when server TTS is unavailable. Only voices marked `localService` are selected. The device reads the Roman Urdu display explanation. |
+| faster-whisper | Local transcription of the browser’s 16 kHz mono WAV capture; Python and model setup required. |
+| Three.js | Supplied classroom and rigged GLB, seven animation clips, dynamic canvas blackboard, and student desk camera. |
+| Web Audio | Local send cue, footstep panning, optional low room tone, and narration energy analysis. |
+| JSON files | Shared device profile/session/progress in ignored `runtime/student/`; no database or authentication. |
 
-Earlier options were evaluated for the original offline plan: CloneLLM added older LangChain/LiteLLM dependencies and did not protect timestamp provenance by default; Charisma is cloud hosted; TalkingHead needs a rigged GLB; MuseTalk is heavy for a 4 GB laptop. The user subsequently selected ElevenLabs, so Ollama, local embedding models and eSpeak are no longer runtime dependencies.
+Provider calls remain behind `/api/chat`, `/api/tts`, and `/api/transcribe`. The UI compatibility layer is in `public/api-contract.js`; animation and board rendering are independent of the model provider.
 
-The secret key is loaded by the server from an environment variable or ignored local file. ElevenLabs processes questions and audio remotely; do not describe this build as fully offline or free of usage limits. The local student ID is not a security boundary. A hosted multi-user release needs authentication and access control.
+## Earlier component evaluation
+
+The initial prototype reviewed CloneLLM, Charisma, TalkingHead, and MuseTalk. These were architecture reviews, not complete hardware benchmarks:
+
+- **CloneLLM:** its LangChain/LiteLLM dependencies would add another integration layer. Timestamp provenance and bounded board output still require application validation. The current backend calls Ollama directly instead; local embeddings are not implemented, and retrieval uses lexical ranking.
+- **Charisma:** a hosted service does not satisfy the standalone local demo requirement.
+- **TalkingHead:** needs a compatible rigged character and facial/viseme setup. The supplied GLB has body animation but no speech morph targets, so this integration uses Three.js body choreography.
+- **MuseTalk:** adds a GPU video generation pipeline and larger model setup. It has not been benchmarked on this laptop and is not part of the reliable classroom path.
+
+An intermediate version used ElevenLabs. That implementation is retained only in the local backup branch; it is not active in this integration. Historical verification notes explicitly identify that provider.
+
+## Limits
+
+The existing backend’s speech availability checks use Unix `which` and an unquoted Python command. Windows may report unavailable even with a suitable executable; the installed browser voice covers TTS, while microphone transcription still needs a working server Python setup. See `docs/integration.md` for the integration findings. Shared-device memory is not a multi-user security boundary.

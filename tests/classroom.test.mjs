@@ -1,0 +1,43 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import * as THREE from 'three';
+import {TeacherAvatar,stabilizeTurnClip} from '../public/avatar.js';
+
+const controls=new Map();
+globalThis.document={hidden:false,querySelector(id){if(!controls.has(id))controls.set(id,{});return controls.get(id);}};
+function actor(){
+ const a=Object.create(TeacherAvatar.prototype),teacher=new THREE.Group(),mixer=new THREE.AnimationMixer(teacher),actions={};
+ for(const [name,duration] of Object.entries({'Pointing':2.77,'Walking':1.47,'Laughing':9.77,'Pointing Forward':4.7,'Angry Point':2.43,'Right Turn':1,'Left Turn':.93}))actions[name]=mixer.clipAction(new THREE.AnimationClip(name,duration,[]));
+ Object.assign(a,{time:0,lessonTime:0,ready:true,motion:true,autoBoard:true,teacher,teacherHome:new THREE.Vector3(-1.25,0,-5.1),log:[],clock:{getDelta:()=>.08},renders:0,renderer:{render(){a.renders++;}},scene:{},camera:new THREE.PerspectiveCamera(),home:new THREE.Vector3(.45,1.2,-.55),look:new THREE.Vector3(.43,1.7,-6.25),mixer,actions});
+ a.teacher.position.copy(a.teacherHome);a.camera.position.copy(a.home);a.cameraLook=a.look.clone();
+ const play=a.play.bind(a);a.play=function(name,once){this.log.push(name);play(name,once);};a.sceneStatus=()=>{};a.paintBoard=()=>{};return a;
+}
+function advance(a,frames){for(let i=0;i<frames;i++)a.tick();}
+test('teaching switches walk, turns, board pointing and student pointing, then returns home',()=>{const a=actor();a.startTeaching(30);for(let i=0;i<560;i++)a.tick();for(const name of ['Walking','Right Turn','Left Turn','Pointing','Pointing Forward'])assert.ok(a.log.includes(name),name);assert.equal(a.teaching,false);assert.equal(a.route,null);assert.ok(a.teacher.position.distanceTo(a.teacherHome)<.001);assert.equal(a.current.paused,true);});
+test('interrupting a walking explanation still returns the teacher home',()=>{const a=actor();a.startTeaching(45);for(let i=0;i<70;i++)a.tick();a.finishTeaching();for(let i=0;i<110;i++)a.tick();assert.ok(a.teacher.position.distanceTo(a.teacherHome)<.001);assert.equal(a.teaching,false);});
+test('pausing and resuming keeps the same active route and plan entry',()=>{const a=actor();a.startTeaching(45);advance(a,15);const route=a.route,index=a.planIndex,position=a.teacher.position.clone(),time=a.time;a.setMotion(false);advance(a,30);assert.equal(a.time,time);assert.ok(a.teacher.position.equals(position));a.setMotion(true);assert.equal(a.route,route);assert.equal(a.planIndex,index);advance(a,6);assert.ok(a.teacher.position.distanceTo(position)>0);});
+test('ending while paused waits to return, then resumes home without teleporting',()=>{const a=actor();a.startTeaching(45);advance(a,30);a.setMotion(false);const position=a.teacher.position.clone();a.finishTeaching();assert.ok(a.teacher.position.equals(position));assert.equal(a.pendingReturn,true);a.setMotion(true);advance(a,100);assert.ok(a.teacher.position.distanceTo(a.teacherHome)<.001);assert.equal(a.current.paused,true);});
+test('ending while paused at home preserves heading and pose until resume',()=>{const a=actor();a.teacher.rotation.y=1;a.play('Pointing Forward');advance(a,2);a.setMotion(false);const action=a.current,time=action.time;a.finishTeaching();advance(a,20);assert.equal(a.teacher.rotation.y,1);assert.equal(a.current,action);assert.equal(action.time,time);a.setMotion(true);advance(a,10);assert.equal(a.teacher.rotation.y,0);assert.equal(a.current.paused,true);});
+test('walking turns before translating and emits alternating footfalls only while moving',()=>{const a=actor(),steps=[];a.onFootstep=s=>steps.push(s);a.walkTo(a.teacherHome.x+3,a.teacherHome.z);const before=a.teacher.position.clone();advance(a,4);assert.ok(a.teacher.position.equals(before),'turn first');advance(a,35);assert.ok(steps.length>=2);assert.deepEqual(steps.slice(0,2).map(s=>s.side),['left','right']);assert.ok(steps.every(s=>Number.isFinite(s.position.x)));const count=steps.length;a.setMotion(false);advance(a,25);assert.equal(steps.length,count);a.setMotion(true);a.finishTeaching();advance(a,100);const done=steps.length;advance(a,40);assert.equal(steps.length,done,'no idle footfalls');});
+test('returning settles heading smoothly before holding the rest pose',()=>{const a=actor();a.teacher.rotation.y=Math.PI/2;a.rest();assert.equal(a.teacher.rotation.y,Math.PI/2);assert.equal(a.segment.kind,'settle');advance(a,4);assert.ok(a.teacher.rotation.y>0&&a.teacher.rotation.y<Math.PI/2);advance(a,6);assert.equal(a.teacher.rotation.y,0);assert.equal(a.current.paused,true);});
+test('turn clips lose only accumulated hip yaw and leave original animation unchanged',()=>{const first=new THREE.Quaternion().setFromEuler(new THREE.Euler(.1,.2,.04,'YXZ')),last=new THREE.Quaternion().setFromEuler(new THREE.Euler(.1,1.4,.04,'YXZ')),values=[...first.toArray(),...last.toArray()],clip=new THREE.AnimationClip('Right Turn',1,[new THREE.QuaternionKeyframeTrack('mixamorigHips.quaternion',[0,1],values)]),copy=stabilizeTurnClip(clip);const e=new THREE.Euler().setFromQuaternion(new THREE.Quaternion().fromArray(copy.tracks[0].values,4),'YXZ');assert.ok(Math.abs(e.y-.2)<1e-6);assert.ok(Math.abs(e.x-.1)<1e-6);assert.ok(Math.abs(e.z-.04)<1e-6);assert.ok(Math.abs(new THREE.Euler().setFromQuaternion(new THREE.Quaternion().fromArray(clip.tracks[0].values,4),'YXZ').y-1.4)<1e-6);});
+test('board steps advance with motion disabled and stop at the last step',()=>{const a=actor(),events=[];a.motion=false;a.onBoardStep=e=>events.push(e);a.setBoard({steps:['One','Two','Three']});a.startTeaching(40);advance(a,540);assert.equal(a.step,2);assert.deepEqual(events.map(e=>e.step),[0,1,2]);assert.equal(a.teacher.position.distanceTo(a.teacherHome),0);assert.equal(a.teaching,false);});
+test('manual board navigation is bounded and does not change the teacher route',()=>{const a=actor();a.setBoard({steps:['One','Two','Three']});a.startTeaching(45);const route=a.route,index=a.planIndex;a.setAutoBoard(false);a.nextBoard();a.previousBoard();assert.equal(a.previousBoard(),false);assert.equal(a.route,route);assert.equal(a.planIndex,index);advance(a,160);assert.equal(a.step,0);a.nextBoard();a.nextBoard();assert.equal(a.nextBoard(),false);assert.equal(a.step,2);});
+test('focus camera eases between views and becomes immediate with reduced motion',()=>{const a=actor();a.focusBoard(true);assert.ok(a.camera.position.equals(a.home));advance(a,4);assert.ok(a.camera.position.z<a.home.z&&a.camera.position.z>-3.4);advance(a,6);assert.equal(a.camera.position.z,-3.4);assert.equal(a.cameraTransition,null);a.setMotion(false);a.focusBoard(false);assert.ok(a.camera.position.equals(a.home));assert.equal(a.cameraTransition,null);});
+test('hidden pages skip rendering and time updates without accumulating footsteps',()=>{const a=actor();a.walkTo(a.teacherHome.x,a.teacherHome.z+3);advance(a,3);const time=a.time,renders=a.renders;document.hidden=true;try{advance(a,30);assert.equal(a.time,time);assert.equal(a.renders,renders);assert.equal(a.footstepPhase,null);}finally{document.hidden=false;}advance(a,1);assert.equal(a.renders,renders+1);});
+test('timestamped teaching frames cap at 30 fps without losing elapsed lesson time',()=>{
+ const a=actor();let now=0,last=0,reads=0;a.clock.getDelta=()=>{reads++;const dt=(now-last)/1000;last=now;return dt;};a.startTeaching(100);
+ for(let i=0;i<60;i++){now=i*1000/60;a.tick(now);}
+ assert.equal(a.renders,30);assert.equal(reads,30,'skipped frames do not consume the clock');assert.ok(Math.abs(a.lessonTime-29/30)<1e-9);assert.ok(Math.abs(a.time-a.lessonTime)<1e-9);
+});
+test('idle frames cap at 15 fps, but manual camera changes render promptly',()=>{
+ const a=actor();let now=0,last=0;a.clock.getDelta=()=>{const dt=(now-last)/1000;last=now;return dt;};
+ for(let i=0;i<60;i++){now=i*1000/60;a.tick(now);}
+ assert.equal(a.renders,15);assert.ok(Math.abs(a.lessonTime-14/15)<1e-9);const rendered=a.renders,accepted=a.lastFrameTimestamp;
+ a.motion=false;a.focusBoard(true);now=accepted+5;a.tick(now);assert.equal(a.renders,rendered+1,'focus change bypasses the idle wait once');assert.equal(a.camera.position.z,-3.4);
+});
+test('untimestamped test ticks remain uncapped and hidden ticks reset the cap',()=>{
+ const a=actor();advance(a,5);assert.equal(a.renders,5);assert.ok(Math.abs(a.lessonTime-.4)<1e-9);a.tick(0);const count=a.renders;a.tick(10);assert.equal(a.renders,count);
+ document.hidden=true;try{a.tick(11);assert.equal(a.lastFrameTimestamp,null);assert.equal(a.renders,count);}finally{document.hidden=false;}
+ a.tick(12);assert.equal(a.renders,count+1,'visible frame does not inherit an old cap timestamp');
+});

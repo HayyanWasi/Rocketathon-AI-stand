@@ -125,7 +125,7 @@
       "end": 26412,
       "time": "07:19:37",
       "title": "Flatter does not mean perfectly flat",
-      "text": "Wavefront flatter ho sakta hai, flat nahin. Wider gap ke baad bhi kuch curvature aur spreading rehti hai. Diagram mein perfectly straight outgoing wavefronts dikhana is question mein ghalat hai.",
+      "text": "Is diagram mein wavelength gap ki width se chhoti hai. Wavefront flatter ho sakta hai, flat nahin. Wider gap ke baad bhi kuch curvature aur spreading rehti hai. Diagram mein perfectly straight outgoing wavefronts dikhana is question mein ghalat hai.",
       "original": "तो इसमें एक वेवलेंथ कम है इसके गैप से बट बनाने से। ठीक है? तो इसलिए मैं आपको बोला था कि नहीं नहीं फ्लैट कभी भी नहीं होगा। शाह सेब फ्लैट टर होगा। फ्लैट टर होगा। फ्लैट नहीं होगा। नहीं नहीं नहीं नहीं नहीं नहीं ये फ्लैट टर होगा। फ्लैट नहीं होगा। फ्लैट नहीं होता। फ्लैटर होता है। ठीक है?",
       "keywords": [
         "flat",
@@ -141,7 +141,8 @@
         "flatter_not_flat"
       ],
       "corrections": [
-        "Transcribed repeated 'flat ter' as 'flatter'. The wider-gap context is supported by D05."
+        "Transcribed repeated 'flat ter' as 'flatter'. The wider-gap context is supported by D05.",
+        "Restored the opening caption at 07:19:37.84: the wavelength is smaller than the gap in this diagram. Builder-reviewed Roman Urdu paraphrase of the retained raw caption, not Sir Mahad-approved; this is a diagram-specific comparison, not a universal threshold rule."
       ],
       "videoUrl": "https://www.youtube.com/watch?v=H5ygtkokVsI",
       "rawSegments": [

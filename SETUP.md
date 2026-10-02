@@ -113,26 +113,13 @@ Open your browser and navigate to:
 
 ## 7. Verify the Setup (Automated Tests)
 
-Run the backend unit tests to ensure all modules, routing, validation, and storage are functioning properly:
+Run the backend, classroom, voice, source adapter, and isolated server contract tests:
 
 ```bash
 npm test
 ```
 
-All 9 test suites should pass:
-```
-✔ standing persona identifies AI representation
-✔ topic index is small and loads the selected passage file
-✔ retrieval selects lecture evidence
-✔ student files load as single device student
-✔ missing evidence and other topics escalate
-✔ agent citations are restricted to supplied IDs
-✔ validated board strips executable primitives
-✔ session state management
-✔ skill selection works
-ℹ pass 9
-ℹ fail 0
-```
+The integrated version has 70 tests. The server contract test uses a temporary copy and a loopback model fixture, so it does not change real student memory or require Ollama. Passing tests do not establish real model teaching quality. See [integration notes](docs/integration.md) for the actual provider checks and known backend limitations.
 
 ---
 
@@ -146,6 +133,7 @@ All 9 test suites should pass:
   ```
 
 ### 2. `TTS: unavailable` on server startup
+- In Windows, the existing backend's `which` check may report unavailable even with eSpeak installed. The classroom falls back to an installed browser voice. That is a generic synthetic voice, not Sir Mahad's clone.
 - Make sure `espeak-ng` is in your system `$PATH`:
   ```bash
   which espeak-ng
@@ -165,3 +153,12 @@ All 9 test suites should pass:
   ```bash
   PORT=5000 npm start
   ```
+
+  PowerShell: `$env:PORT='5000'; npm start`.
+
+### 5. Configuring a different model or endpoint
+
+- `OLLAMA_MODEL` overrides `runtime/ollama-model.txt`; the default is `qwen2.5:0.5b`.
+- `OLLAMA_HOST` must be an Ollama host supporting native `/api/chat` and `/api/tags`, not an OpenAI-compatible `/v1` base URL.
+- `.env` is not automatically loaded by `npm start`. On Node 22 use `node --env-file=.env server.mjs`, or set variables in your shell.
+- The current backend uses one shared device student profile under `runtime/student/`. **Start a new session** also clears that shared conversation.
