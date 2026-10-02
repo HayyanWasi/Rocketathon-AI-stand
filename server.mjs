@@ -5,7 +5,7 @@ import {fileURLToPath} from 'node:url';
 import {randomUUID} from 'node:crypto';
 
 import {health, warmup, modelName} from './backend/llm.mjs';
-import {synthesizeMixed, transcribe, ttsAvailable, sttAvailable} from './backend/speech.mjs';
+import {synthesizeMixed, transcribe, ttsLabel, sttAvailable} from './backend/speech.mjs';
 import {teach} from './backend/lesson.mjs';
 import {loadBase} from './backend/context.mjs';
 import {ensureStudentDir} from './backend/students.mjs';
@@ -26,7 +26,7 @@ async function body(req,max=2e6){let n=0,parts=[];for await(const p of req){n+=p
 function localOnly(req){const host=req.headers.host||'',origin=req.headers.origin;return /^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host)&&(!origin||/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin));}
 
 const server=http.createServer(async(req,res)=>{try{const url=new URL(req.url,'http://localhost');if(!localOnly(req))return json(res,403,{error:'Local access only'});res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');
-  if(url.pathname==='/api/health'||url.pathname==='/api/config'){const s=await health();return json(res,200,{ok:true,provider:'local-llm',available:s.available,error:s.error||null,model:modelName(),tts:ttsAvailable()?'eSpeak NG':'unavailable',stt:sttAvailable()?'faster-whisper':'unavailable',topic:'Diffraction of waves'});}
+  if(url.pathname==='/api/health'||url.pathname==='/api/config'){const s=await health();return json(res,200,{ok:true,provider:'local-llm',available:s.available,error:s.error||null,model:modelName(),tts:ttsLabel(),stt:sttAvailable()?'faster-whisper':'unavailable',topic:'Diffraction of waves'});}
   if(url.pathname==='/api/library'){const {index}=await loadBase();const passages=JSON.parse(await fs.readFile(path.join(root,'data/passages.json'),'utf8'));return json(res,200,{index, passages});}
   if(url.pathname==='/api/teacher')return json(res,200,{...teacher,approvedNotes:notes});
   if(url.pathname==='/api/chat'&&req.method==='POST'){const d=JSON.parse((await body(req,24000)).toString());if(typeof d.question!=='string'||!d.question.trim()||d.question.length>1200)return json(res,400,{error:'Enter a question of 1–1200 characters.'});const controller = new AbortController(); req.on('close', () => controller.abort()); const answer=await teach(d.question,{signal: controller.signal});return json(res,200,{id:randomUUID(),...answer});}
@@ -49,5 +49,5 @@ const port=Number(process.env.PORT||4317);server.listen(port,'127.0.0.1',async (
   const h=await health();
   console.log(`Sir Mahad’s Physics Stand-In · http://127.0.0.1:${port}`);
   console.log(`Model: ${modelName()} (${h.available?'available':'unavailable'})`);
-  console.log(`TTS: ${ttsAvailable()?'eSpeak NG':'unavailable'} | STT: ${sttAvailable()?'faster-whisper':'unavailable'}`);
+  console.log(`TTS: ${ttsLabel()} | STT: ${sttAvailable()?'faster-whisper':'unavailable'}`);
 });

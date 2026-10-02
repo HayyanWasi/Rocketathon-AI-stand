@@ -8,9 +8,31 @@ import crypto from 'node:crypto';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const runtimeDir = path.join(root, 'runtime');
 
+// Sir Mahad's cloned voice runs in the Python voice service (voice-service/server.py).
+// eSpeak NG stays as a fallback when that service is not running.
+const VOICE_URL = (process.env.VOICE_URL || 'http://127.0.0.1:8765').replace(/\/+$/, '');
+let voiceService = { ok: false, voice: null };
+
+async function checkVoiceService() {
+  try {
+    const r = await fetch(VOICE_URL + '/health', { signal: AbortSignal.timeout(1500) });
+    const d = await r.json();
+    voiceService = { ok: r.ok && d.ok, voice: d.voice };
+  } catch { voiceService = { ok: false, voice: null }; }
+  return voiceService;
+}
+await checkVoiceService();
+setInterval(checkVoiceService, 10000).unref();
+
 export function ttsAvailable() {
-  try { execSync('which espeak-ng', { stdio: 'ignore' }); return true; }
+  if (voiceService.ok) return true;
+  try { execSync(process.platform === 'win32' ? 'where espeak-ng' : 'which espeak-ng', { stdio: 'ignore' }); return true; }
   catch { return false; }
+}
+
+export function ttsLabel() {
+  if (voiceService.ok) return 'Sir Mahad cloned voice';
+  return ttsAvailable() ? 'eSpeak NG (fallback)' : 'unavailable';
 }
 
 export function sttAvailable() {
@@ -51,7 +73,26 @@ export async function synthesize(text, lang = 'ur') {
 
 export async function synthesizeMixed(speechText) {
   if (!speechText) return Buffer.from([]);
-  
+  if (voiceService.ok || (await checkVoiceService()).ok) {
+    try {
+      // The voice service understands the <en>…</en> tags and cleans the text itself.
+      const r = await fetch(VOICE_URL + '/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: speechText }),
+        signal: AbortSignal.timeout(60000),
+      });
+      if (r.ok) return Buffer.from(await r.arrayBuffer());
+      console.error('Voice service TTS failed:', r.status, await r.text());
+    } catch (e) {
+      console.error('Voice service unreachable, using eSpeak:', e.message);
+      voiceService = { ok: false, voice: null };
+    }
+  }
+  return espeakMixed(speechText);
+}
+
+async function espeakMixed(speechText) {
   const segments = [];
   let currentText = speechText;
   while (currentText.length > 0) {

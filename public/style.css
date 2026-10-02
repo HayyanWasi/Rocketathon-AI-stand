@@ -12,3 +12,4 @@ body{overflow:hidden;background:#d8d5cc}.glass,.lesson,.scene-label,.view-button
 .input-hint{font-size:9px}@media(max-width:650px){.input-hint{font-size:8px;flex-wrap:wrap;row-gap:3px}}
 .input-hint{width:max-content;max-width:100%;margin:9px auto 0;padding:4px 10px;border-radius:12px;background:#f8faf1d9;color:#40533e;text-shadow:none;backdrop-filter:blur(10px)}
 .check-actions{flex-wrap:wrap;column-gap:12px;row-gap:2px}
+/* call button (Person 2): red while a call is live; final styling is Person 3's */.call-button{padding:6px 11px;font-size:10px}.call-button[data-state]:not([data-state="off"]){background:#c4473a;border-color:#c4473a;color:#fff}
